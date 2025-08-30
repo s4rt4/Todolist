@@ -26,7 +26,7 @@ Perfect for practicing front-end development and deploying on **GitHub Pages**.
 
 
 ## 🚀 Live Demo
-👉 [View on GitHub Pages](https://s4rt4.github.io/todolist)
+👉 [View on GitHub Pages](https://s4rt4.github.io/Todolist)
 
 
 ## 🚀 How to Use
