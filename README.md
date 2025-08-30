@@ -21,8 +21,15 @@ Perfect for practicing front-end development and deploying on **GitHub Pages**.
 - **Font Awesome** – icons (trash, sun, moon)  
 
 ---
+## 📷 Preview
+![App Preview](todolist.gif)
+
+
+## 🚀 Live Demo
+👉 [View on GitHub Pages](https://s4rt4.github.io/todolist)
+
 
 ## 🚀 How to Use
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/s4rt4/todolist.git
