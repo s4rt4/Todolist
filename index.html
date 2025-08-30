@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <!-- Link Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #222;
+      color: white;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 380px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark .container {
+      background: #333;
+      color: white;
+    }
+    h2 {
+      text-align: center;
+    }
+    input[type="text"] {
+      width: 68%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      margin-left: 5px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    li {
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s, color 0.3s;
+
+    }
+    li.completed {
+      background: green;
+      color: white;
+      text-decoration: line-through;
+    }
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-grow: 1;
+    }
+    .delete {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .delete:hover {
+      background: darkred;
+    }
+    .theme-toggle {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    body.dark li {
+  background: #444;   /* background item lebih gelap */
+  color: #ddd;        /* teks abu-abu terang */
+}
+
+body.dark li.completed {
+  background: green;  /* tetap hijau kalau selesai */
+  color: white;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="theme-toggle">
+      <button id="themeBtn" onclick="toggleTheme()">
+  <i class="fas fa-moon"></i>
+</button>
+
+    </div>
+    <h2>To-Do List</h2>
+    <input type="text" id="taskInput" placeholder="Tambah tugas...">
+    <button onclick="addTask()">Tambah</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      todos.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = task.completed ? "completed" : "";
+
+        const content = document.createElement("div");
+        content.className = "task-content";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+        checkbox.onchange = () => toggleComplete(index);
+
+        const span = document.createElement("span");
+        span.textContent = task.text;
+
+        content.appendChild(checkbox);
+        content.appendChild(span);
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "delete";
+        delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        delBtn.onclick = () => deleteTask(index);
+
+        li.appendChild(content);
+        li.appendChild(delBtn);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      if (taskText !== "") {
+        todos.push({ text: taskText, completed: false });
+        localStorage.setItem("todos", JSON.stringify(todos));
+        taskInput.value = "";
+        renderTasks();
+      }
+    }
+
+    function toggleComplete(index) {
+      todos[index].completed = !todos[index].completed;
+      localStorage.setItem("todos", JSON.stringify(todos));
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      todos.splice(index, 1);
+      localStorage.setItem("todos", JSON.stringify(todos));
+      renderTasks();
+    }
+
+    function toggleTheme() {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+
+  const themeBtn = document.getElementById("themeBtn");
+  themeBtn.innerHTML = isDark 
+    ? '<i class="fas fa-sun"></i>' 
+    : '<i class="fas fa-moon"></i>';
+}
+
+
+    function init() {
+      renderTasks();
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
